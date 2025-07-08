@@ -1,0 +1,128 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String   @id @default(cuid())
+    email     String   @unique
+    name      String?
+    avatar    String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    pages Page[]
+
+    @@map("users")
+}
+
+model ComponentTemplate {
+    id          String   @id @default(cuid())
+    name        String
+    category    String // hero, header, footer, feature, testimonial, faq, pricing, etc.
+    variant     String // variant-1, variant-2, variant-3, etc.
+    description String?
+    previewUrl  String? // Screenshot/preview image URL
+    htmlContent String   @db.Text // HTML template with placeholders
+    cssStyles   String   @db.Text // Additional CSS styles
+    jsCode      String?  @db.Text // Optional JavaScript code
+    defaultData Json // Default content data (text, images, etc.)
+    schema      Json // Schema defining editable fields and their types
+    tags        String[] // Tags for better categorization and search
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    pageComponents PageComponent[]
+
+    @@map("component_templates")
+}
+
+model Page {
+    id              String    @id @default(cuid())
+    title           String
+    slug            String    @unique
+    description     String?
+    metaTitle       String?
+    metaDescription String?
+    favicon         String?
+    customCss       String?   @db.Text
+    customJs        String?   @db.Text
+    published       Boolean   @default(false)
+    publishedAt     DateTime?
+    userId          String
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+
+    user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    components PageComponent[]
+    versions   PageVersion[]
+
+    @@map("pages")
+}
+
+model PageComponent {
+    id               String   @id @default(cuid())
+    pageId           String
+    templateId       String
+    position         Int // Order of component on the page
+    customData       Json // User customized content (text, images, etc.)
+    styles           Json? // Custom styling overrides
+    responsiveStyles Json? // Responsive-specific styles
+    isVisible        Boolean  @default(true)
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+
+    page     Page              @relation(fields: [pageId], references: [id], onDelete: Cascade)
+    template ComponentTemplate @relation(fields: [templateId], references: [id])
+
+    @@map("page_components")
+}
+
+model PageVersion {
+    id          String   @id @default(cuid())
+    pageId      String
+    versionName String
+    components  Json // Snapshot of page components at this version
+    createdAt   DateTime @default(now())
+
+    page Page @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+    @@map("page_versions")
+}
+
+// Future models for advanced features
+
+model Template {
+    id          String   @id @default(cuid())
+    name        String
+    description String?
+    thumbnail   String?
+    isPublic    Boolean  @default(false)
+    userId      String
+    pageData    Json // Complete page structure
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("templates")
+}
+
+model Asset {
+    id           String   @id @default(cuid())
+    filename     String
+    originalName String
+    mimeType     String
+    size         Int
+    url          String
+    userId       String?
+    createdAt    DateTime @default(now())
+
+    @@map("assets")
+}
