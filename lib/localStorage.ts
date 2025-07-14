@@ -221,11 +221,11 @@ export const pageComponentStorage = {
 
 	updatePositions(pageId: string, componentIds: string[]): void {
 		const components = this.getAll();
+		const pageComponents = components.filter((c) => c.pageId === pageId);
 
+		// Update positions based on the new order
 		componentIds.forEach((id, index) => {
-			const component = components.find(
-				(c) => c.id === id && c.pageId === pageId
-			);
+			const component = pageComponents.find((c) => c.id === id);
 			if (component) {
 				component.position = index;
 				component.updatedAt = new Date().toISOString();

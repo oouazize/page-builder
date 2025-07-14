@@ -2,81 +2,131 @@ import { ComponentTemplate } from "@/types";
 import { generateId } from "./localStorage";
 
 export const seedComponentTemplates: ComponentTemplate[] = [
-	// Hero Sections
+	// AgriFood Tech Hero Section - Main Hero
 	{
-		id: generateId(),
-		name: "Hero - Centered with CTA",
+		id: "required-program-hero",
+		name: "Hero Section",
 		category: "hero",
-		variant: "centered",
+		variant: "agrifood-main",
 		description:
-			"A centered hero section with headline, subtitle, and call-to-action button",
+			"Modern hero section with cover image, header navigation, and clean program information layout",
 		htmlContent: `
-      <section class="relative bg-gradient-to-r from-purple-600 to-blue-600 overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-50"></div>
-        <div class="relative max-w-7xl mx-auto">
-          <div class="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div class="sm:text-center lg:text-left">
-                <h1 class="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
-                  <span class="block xl:inline">{{title}}</span>
-                </h1>
-                <p class="mt-3 text-base text-gray-200 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-                  {{subtitle}}
-                </p>
-                <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <div class="rounded-md shadow">
-                    <a href="{{primaryButtonLink}}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                      {{primaryButtonText}}
-                    </a>
-                  </div>
-                  <div class="mt-3 sm:mt-0 sm:ml-3">
-                    <a href="{{secondaryButtonLink}}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
-                      {{secondaryButtonText}}
-                    </a>
-                  </div>
-                </div>
+      <section class="relative overflow-hidden">
+        <!-- Cover Image Background -->
+        <div
+          class="w-full bg-cover bg-center bg-no-repeat h-[40dvh] hero-cover-bg"
+          style="--desktop-bg: url('{{coverImageDesktop}}'); --mobile-bg: url('{{coverImageMobile}}'); background-image: var(--desktop-bg);"
+        ></div>
+        
+        <!-- Content Below Cover -->
+        <div class="flex md:flex-row flex-col justify-between items-center space-y-6 py-6 px-4 md:px-20">
+          <div class="w-full flex items-center gap-4">
+            <img
+              src="{{logoUrl}}"
+              alt="{{organizationName}} logo"
+              class="hidden md:block h-40 w-40"
+            />
+            <div class="flex flex-col space-y-2">
+              <!-- Program Title -->
+              <h2 class="text-xl lg:text-3xl font-bold">
+                {{programTitle}}
+              </h2>
+              
+              <!-- Program Description -->
+              <p class="text-gray-400 max-w-2xl">
+                {{programDescription}}
+              </p>
+            </div>
+          </div>
+          
+          <div class="w-full flex items-center justify-between md:justify-center gap-10">
+            <div class="flex flex-col justify-center">
+              <div class="flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+                <p class="text-gray-400">{{participantCount}}</p>
               </div>
-            </main>
+              <p>{{participantLabel}}</p>
+            </div>
+            
+            <div class="flex flex-col justify-center">
+              <div class="flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p>{{timeLeft}}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     `,
-		cssStyles: "",
+		cssStyles: `
+			/* Responsive background images using CSS custom properties */
+			@media (max-width: 767px) {
+				.hero-cover-bg {
+					background-image: var(--mobile-bg, var(--desktop-bg)) !important;
+				}
+			}
+		`,
 		defaultData: {
-			title: "Build your next project faster",
-			subtitle:
-				"Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.",
-			primaryButtonText: "Get started",
-			primaryButtonLink: "#",
-			secondaryButtonText: "Live demo",
-			secondaryButtonLink: "#",
+			organizationName: "AgriFoodTech",
+			logoUrl: "https://cdn.fs.agorize.com/8PbH4RChRGrltQW5XjqR",
+			programTitle: "AgriFoodTech Incubator 4th Edition",
+			programDescription:
+				"Nurturing the seeds of the Moroccan agricultural transformation",
+			coverImageDesktop: "https://cdn.fs.agorize.com/WqF5kkL9RzS8k6UzUgYn",
+			coverImageMobile: "https://cdn.fs.agorize.com/bysRTb4HSsaBDsEAuLDL",
+			participantCount: "1000",
+			participantLabel: "Participants",
+			timeLeft: "48 days left",
 		},
 		schema: {
 			fields: [
-				{ name: "title", type: "text", label: "Main Title", required: true },
-				{ name: "subtitle", type: "textarea", label: "Subtitle" },
 				{
-					name: "primaryButtonText",
+					name: "organizationName",
 					type: "text",
-					label: "Primary Button Text",
+					label: "Organization Name",
+					required: true,
 				},
+				{ name: "logoUrl", type: "image", label: "Organization Logo" },
 				{
-					name: "primaryButtonLink",
-					type: "url",
-					label: "Primary Button Link",
-				},
-				{
-					name: "secondaryButtonText",
+					name: "programTitle",
 					type: "text",
-					label: "Secondary Button Text",
+					label: "Program Title",
+					required: true,
 				},
 				{
-					name: "secondaryButtonLink",
-					type: "url",
-					label: "Secondary Button Link",
+					name: "programDescription",
+					type: "textarea",
+					label: "Program Description",
 				},
+				{
+					name: "coverImageDesktop",
+					type: "image",
+					label: "Cover Image (Desktop)",
+					required: true,
+				},
+				{
+					name: "coverImageMobile",
+					type: "image",
+					label: "Cover Image (Mobile)",
+				},
+				{
+					name: "participantCount",
+					type: "text",
+					label: "Participant Count",
+				},
+				{
+					name: "participantLabel",
+					type: "text",
+					label: "Participant Label",
+				},
+				{ name: "timeLeft", type: "text", label: "Time Left" },
 			],
 		},
+		isActive: true,
 		createdAt: new Date().toISOString(),
 		updatedAt: new Date().toISOString(),
 	},
@@ -419,96 +469,6 @@ export const seedComponentTemplates: ComponentTemplate[] = [
 	},
 
 	// NEW COMPONENTS START HERE
-
-	// Hero Section - Image Left Variant
-	{
-		id: generateId(),
-		name: "Hero - Image Left",
-		category: "hero",
-		variant: "image-left",
-		description: "Hero section with image on the left and content on the right",
-		htmlContent: `
-      <section class="bg-white overflow-hidden">
-        <div class="relative max-w-7xl mx-auto pt-20 pb-12 px-4 sm:px-6 lg:px-8 lg:py-20">
-          <div class="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-16">
-            <div class="relative z-10 md:text-center lg:text-left lg:col-span-7">
-              <div class="relative">
-                <p class="inline-block text-sm font-semibold uppercase tracking-wide text-indigo-600 mb-4">
-                  {{tagline}}
-                </p>
-                <h1 class="text-4xl tracking-tight leading-10 font-extrabold text-gray-900 sm:text-5xl sm:leading-none md:text-6xl lg:text-5xl xl:text-6xl">
-                  {{title}}
-                </h1>
-                <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                  {{subtitle}}
-                </p>
-              </div>
-              <div class="mt-10 sm:flex sm:justify-center lg:justify-start">
-                <div class="rounded-md shadow">
-                  <a href="{{primaryButtonLink}}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                    {{primaryButtonText}}
-                  </a>
-                </div>
-                <div class="mt-3 sm:mt-0 sm:ml-3">
-                  <a href="{{secondaryButtonLink}}" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10">
-                    {{secondaryButtonText}}
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="relative sm:max-w-lg sm:mx-auto lg:max-w-none lg:mx-0 lg:col-span-5">
-              <img class="w-full rounded-lg shadow-xl" src="{{imageUrl}}" alt="{{imageAlt}}">
-            </div>
-          </div>
-        </div>
-      </section>
-    `,
-		cssStyles: "",
-		defaultData: {
-			tagline: "Introducing",
-			title: "Revolutionary Solution",
-			subtitle:
-				"Transform your workflow with our cutting-edge platform designed for modern teams.",
-			primaryButtonText: "Get Started",
-			primaryButtonLink: "#",
-			secondaryButtonText: "Learn More",
-			secondaryButtonLink: "#",
-			imageUrl:
-				"https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-			imageAlt: "Hero image",
-		},
-		schema: {
-			fields: [
-				{ name: "tagline", type: "text", label: "Tagline" },
-				{ name: "title", type: "text", label: "Main Title", required: true },
-				{ name: "subtitle", type: "textarea", label: "Subtitle" },
-				{
-					name: "primaryButtonText",
-					type: "text",
-					label: "Primary Button Text",
-				},
-				{
-					name: "primaryButtonLink",
-					type: "url",
-					label: "Primary Button Link",
-				},
-				{
-					name: "secondaryButtonText",
-					type: "text",
-					label: "Secondary Button Text",
-				},
-				{
-					name: "secondaryButtonLink",
-					type: "url",
-					label: "Secondary Button Link",
-				},
-				{ name: "imageUrl", type: "image", label: "Hero Image" },
-				{ name: "imageAlt", type: "text", label: "Image Alt Text" },
-			],
-		},
-		createdAt: new Date().toISOString(),
-		updatedAt: new Date().toISOString(),
-	},
 
 	// Testimonial Section
 	{
@@ -972,7 +932,26 @@ export const seedComponentTemplates: ComponentTemplate[] = [
 	},
 ];
 
-export const initializeSeedData = () => {
-	// This function will be called to populate localStorage with initial component templates
+export function initializeSeedData(): ComponentTemplate[] {
 	return seedComponentTemplates;
-};
+}
+
+// Function to refresh required templates
+export function refreshRequiredTemplates(): void {
+	const { componentTemplateStorage } = require("./localStorage");
+
+	// Remove existing required templates
+	componentTemplateStorage.delete("required-program-hero");
+
+	// Add updated required templates
+	const requiredTemplates = seedComponentTemplates.filter(
+		(t) => t.id === "required-program-hero"
+	);
+
+	requiredTemplates.forEach((template) => {
+		componentTemplateStorage.save(template);
+	});
+}
+
+// Export seed data initialization function
+export { seedComponentTemplates as default };

@@ -27,6 +27,21 @@ export function PropertiesPanel({ component, onUpdate }: PropertiesPanelProps) {
 		onUpdate({ [fieldName]: value });
 	};
 
+	// Filter fields based on component type
+	const getEditableFields = () => {
+		if (!component?.template) return [];
+
+		// For required program hero, only show cover image field
+		if (component.templateId === "required-program-hero") {
+			return component.template.schema.fields.filter(
+				(field) => field.name === "coverImage"
+			);
+		}
+
+		// For all other components, show all fields
+		return component.template.schema.fields;
+	};
+
 	const renderField = (field: SchemaField) => {
 		const value = component.customData[field.name] || "";
 
@@ -208,7 +223,18 @@ export function PropertiesPanel({ component, onUpdate }: PropertiesPanelProps) {
 			<div className="flex-1 overflow-y-auto sidebar-scroll">
 				{activeTab === "content" ? (
 					<div className="p-4 space-y-4">
-						{component.template.schema.fields.map((field) => (
+						{component.templateId === "required-program-hero" && (
+							<div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md">
+								<p className="text-xs text-orange-700 font-medium">
+									📌 Required Hero Section
+								</p>
+								<p className="text-xs text-orange-600 mt-1">
+									Only the cover image can be edited. Other content is managed
+									automatically.
+								</p>
+							</div>
+						)}
+						{getEditableFields().map((field) => (
 							<div key={field.name} className="space-y-2">
 								<label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
 									{getFieldIcon(field.type)}
@@ -218,6 +244,12 @@ export function PropertiesPanel({ component, onUpdate }: PropertiesPanelProps) {
 								{renderField(field)}
 							</div>
 						))}
+						{getEditableFields().length === 0 && (
+							<div className="text-center text-gray-500 py-8">
+								<Settings className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+								<p className="text-sm">No editable fields available</p>
+							</div>
+						)}
 					</div>
 				) : (
 					<div className="p-4">

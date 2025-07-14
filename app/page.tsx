@@ -13,6 +13,8 @@ import {
 } from "@/lib/localStorage";
 import { componentTemplateStorage } from "@/lib/localStorage";
 import { initializeSeedData } from "@/lib/seedData";
+import { pageComponentStorage } from "@/lib/localStorage";
+import { PageComponent } from "@/types";
 
 export default function Dashboard() {
 	const [pages, setPages] = useState<Page[]>([]);
@@ -56,9 +58,35 @@ export default function Dashboard() {
 		};
 
 		pageStorage.save(newPage);
+
+		// Add required default components
+		const heroTemplate = componentTemplateStorage.getById(
+			"required-program-hero"
+		);
+
+		if (heroTemplate) {
+			const heroComponent: PageComponent = {
+				id: generateId(),
+				pageId: newPage.id,
+				templateId: heroTemplate.id,
+				position: 0,
+				customData: {
+					...heroTemplate.defaultData,
+					programName: newPageTitle, // Use the page title as program name
+				},
+				isVisible: true,
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
+			};
+			pageComponentStorage.save(heroComponent);
+		}
+
 		setPages([...pages, newPage]);
 		setNewPageTitle("");
 		setShowCreateDialog(false);
+
+		// Navigate directly to the editor
+		window.location.href = `/editor/${newPage.id}`;
 	};
 
 	const handleDeletePage = (pageId: string) => {

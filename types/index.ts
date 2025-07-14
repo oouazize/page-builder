@@ -109,6 +109,7 @@ export const COMPONENT_CATEGORIES = [
 	"newsletter",
 	"logo-grid",
 	"banner",
+	"registration",
 ] as const;
 
 export type ComponentCategory = (typeof COMPONENT_CATEGORIES)[number];
