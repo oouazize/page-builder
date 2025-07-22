@@ -32,6 +32,7 @@ export interface SchemaField {
 	label: string;
 	placeholder?: string;
 	required?: boolean;
+	tab?: "content" | "style";
 	options?: { label: string; value: string }[];
 	validation?: {
 		min?: number;
@@ -110,6 +111,9 @@ export const COMPONENT_CATEGORIES = [
 	"logo-grid",
 	"banner",
 	"registration",
+	"about",
+	"mission",
+	"vision",
 ] as const;
 
 export type ComponentCategory = (typeof COMPONENT_CATEGORIES)[number];

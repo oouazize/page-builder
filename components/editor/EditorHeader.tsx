@@ -25,6 +25,8 @@ interface EditorHeaderProps {
 	onTogglePreview: () => void;
 	currentBreakpoint: "mobile" | "tablet" | "desktop";
 	onBreakpointChange: (breakpoint: "mobile" | "tablet" | "desktop") => void;
+	onSave: () => void;
+	hasUnsavedChanges: boolean;
 }
 
 export function EditorHeader({
@@ -33,6 +35,8 @@ export function EditorHeader({
 	onTogglePreview,
 	currentBreakpoint,
 	onBreakpointChange,
+	onSave,
+	hasUnsavedChanges,
 }: EditorHeaderProps) {
 	const router = useRouter();
 	const [isSaving, setIsSaving] = useState(false);
@@ -43,6 +47,10 @@ export function EditorHeader({
 		// Simulate save delay
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
+		// Call the onSave function passed from parent to save component changes
+		onSave();
+		
+		// Also update the page metadata
 		const updatedPage = {
 			...page,
 			updatedAt: new Date().toISOString(),
@@ -159,14 +167,20 @@ export function EditorHeader({
 						</button>
 
 						{/* Save Button */}
-						<button
-							onClick={handleSave}
-							disabled={isSaving}
-							className="flex items-center space-x-2 px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-md text-sm font-medium transition-colors disabled:opacity-50"
-						>
-							<Save className={`w-4 h-4 ${isSaving ? "animate-spin" : ""}`} />
-							<span>{isSaving ? "Saving..." : "Save"}</span>
-						</button>
+				<button
+					onClick={handleSave}
+					disabled={isSaving || !hasUnsavedChanges}
+					className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-50 ${
+						hasUnsavedChanges
+							? "bg-blue-600 text-white hover:bg-blue-700"
+							: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+					}`}
+				>
+					<Save className={`w-4 h-4 ${isSaving ? "animate-spin" : ""}`} />
+					<span>
+						{isSaving ? "Saving..." : hasUnsavedChanges ? "Save Changes" : "Saved"}
+					</span>
+				</button>
 
 						{/* Publish Button */}
 						<button

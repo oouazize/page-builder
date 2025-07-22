@@ -78,6 +78,7 @@
 /* Custom styles for the page builder */
 .page-builder-canvas {
 	min-height: calc(100vh - 200px);
+	overflow-x: visible;
 }
 
 .component-hover:hover {
@@ -91,6 +92,17 @@
 .drag-placeholder {
 	@apply bg-blue-100 border-2 border-dashed border-blue-400 rounded-lg;
 	height: 100px;
+}
+
+/* Hero component breakout styles for editor */
+.hero-breakout {
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	width: 100vw;
+	max-width: none !important;
 }
 
 .sidebar-scroll {
@@ -107,10 +119,186 @@
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb {
-	background-color: rgb(203 213 225);
+	background: rgb(203 213 225);
 	border-radius: 3px;
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-	background-color: rgb(148 163 184);
+	background: rgb(148 163 184);
+}
+
+/* Skiper-UI Inspired Animations */
+@keyframes fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes counter {
+	from {
+		transform: translateY(10px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes countUp {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slideInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-50px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+@keyframes progressFill {
+	from {
+		width: 0%;
+	}
+	to {
+		width: 100%;
+	}
+}
+
+/* Animation classes */
+.animate-fade-in {
+	animation: fade-in 0.6s ease-out forwards;
+	animation-delay: 0.2s;
+}
+
+.counter {
+	animation: counter 0.6s ease-out;
+}
+
+.counter-animation {
+	animation: counter 0.6s ease-out;
+}
+
+.animate-float {
+	animation: float 6s ease-in-out infinite;
+}
+
+.slide-in-left {
+	animation: slideInLeft 0.6s ease-out;
+}
+
+.slide-in-right {
+	animation: slideInRight 0.6s ease-out;
+}
+
+.progress-bar {
+	transition: width 2s ease-in-out;
+}
+
+.progress-animation {
+	animation: progressFill 2s ease-out forwards;
+}
+
+/* Glassmorphism effects */
+.backdrop-blur-lg {
+	backdrop-filter: blur(16px);
+}
+
+.backdrop-blur-sm {
+	backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-xl {
+	backdrop-filter: blur(24px);
+}
+
+/* Enhanced hover effects */
+.hover-lift {
+	transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+	transform: translateY(-8px);
+}
+
+/* Gradient text effects */
+.gradient-text {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+/* Interactive elements */
+.interactive-element {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-element:hover {
+	transform: scale(1.05);
+}
+
+/* Modern card effects */
+.modern-card {
+	background: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transition: all 0.5s ease;
+}
+
+.modern-card:hover {
+	background: rgba(255, 255, 255, 0.9);
+	backdrop-filter: blur(20px);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	transform: translateY(-4px);
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }

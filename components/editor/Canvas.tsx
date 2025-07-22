@@ -71,7 +71,7 @@ export function Canvas({
 
 	return (
 		<div className="flex-1 bg-gray-100 overflow-auto">
-			<div className="min-h-full p-8">
+			<div className="min-h-full">
 				<div
 					className={`mx-auto bg-white shadow-lg min-h-screen ${canvasWidth}`}
 				>

@@ -12,7 +12,10 @@ import {
 	initializeDefaultData,
 } from "@/lib/localStorage";
 import { componentTemplateStorage } from "@/lib/localStorage";
-import { initializeSeedData } from "@/lib/seedData";
+import {
+	initializeSeedData,
+	forceRefreshComponentTemplates,
+} from "@/lib/seedData";
 import { pageComponentStorage } from "@/lib/localStorage";
 import { PageComponent } from "@/types";
 
@@ -26,12 +29,8 @@ export default function Dashboard() {
 		// Initialize default data on first load
 		initializeDefaultData();
 
-		// Initialize seed data if no components exist
-		const existingComponents = componentTemplateStorage.getAll();
-		if (existingComponents.length === 0) {
-			const seedData = initializeSeedData();
-			componentTemplateStorage.saveMany(seedData);
-		}
+		// Always force refresh component templates to get the latest skiper-ui inspired components
+		forceRefreshComponentTemplates();
 
 		// Load user and pages
 		const currentUser = userStorage.getCurrentUser();

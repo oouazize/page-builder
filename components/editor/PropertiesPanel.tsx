@@ -27,19 +27,27 @@ export function PropertiesPanel({ component, onUpdate }: PropertiesPanelProps) {
 		onUpdate({ [fieldName]: value });
 	};
 
-	// Filter fields based on component type
+	// Filter fields based on component type and active tab
 	const getEditableFields = () => {
 		if (!component?.template) return [];
 
-		// For required program hero, only show cover image field
-		if (component.templateId === "required-program-hero") {
-			return component.template.schema.fields.filter(
-				(field) => field.name === "coverImage"
-			);
+		// Filter fields by active tab
+		const fieldsForTab = component.template.schema.fields.filter(
+			(field) => field.tab === activeTab || !field.tab // Include fields without tab for backward compatibility
+		);
+
+		// For required program hero in content tab, show all content fields
+		if (component.templateId === "required-program-hero" && activeTab === "content") {
+			return fieldsForTab;
 		}
 
-		// For all other components, show all fields
-		return component.template.schema.fields;
+		// For required program hero in style tab, show style fields
+		if (component.templateId === "required-program-hero" && activeTab === "style") {
+			return fieldsForTab;
+		}
+
+		// For all other components, show fields for the active tab
+		return fieldsForTab;
 	};
 
 	const renderField = (field: SchemaField) => {
@@ -222,47 +230,47 @@ export function PropertiesPanel({ component, onUpdate }: PropertiesPanelProps) {
 			{/* Content */}
 			<div className="flex-1 overflow-y-auto sidebar-scroll">
 				{activeTab === "content" ? (
-					<div className="p-4 space-y-4">
-						{component.templateId === "required-program-hero" && (
-							<div className="mb-4 p-3 bg-orange-50 border border-orange-200 rounded-md">
-								<p className="text-xs text-orange-700 font-medium">
-									📌 Required Hero Section
-								</p>
-								<p className="text-xs text-orange-600 mt-1">
-									Only the cover image can be edited. Other content is managed
-									automatically.
-								</p>
-							</div>
-						)}
-						{getEditableFields().map((field) => (
-							<div key={field.name} className="space-y-2">
-								<label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
-									{getFieldIcon(field.type)}
-									<span>{field.label}</span>
-									{field.required && <span className="text-red-500">*</span>}
-								</label>
-								{renderField(field)}
-							</div>
-						))}
-						{getEditableFields().length === 0 && (
-							<div className="text-center text-gray-500 py-8">
-								<Settings className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-								<p className="text-sm">No editable fields available</p>
-							</div>
-						)}
-					</div>
-				) : (
-					<div className="p-4">
+				<div className="p-4 space-y-4">
+					{getEditableFields().map((field) => (
+						<div key={field.name} className="space-y-2">
+							<label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+								{getFieldIcon(field.type)}
+								<span>{field.label}</span>
+								{field.required && <span className="text-red-500">*</span>}
+							</label>
+							{renderField(field)}
+						</div>
+					))}
+					{getEditableFields().length === 0 && (
+						<div className="text-center text-gray-500 py-8">
+							<Settings className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+							<p className="text-sm">No content fields available</p>
+						</div>
+					)}
+				</div>
+			) : (
+				<div className="p-4 space-y-4">
+					{getEditableFields().map((field) => (
+						<div key={field.name} className="space-y-2">
+							<label className="flex items-center space-x-2 text-sm font-medium text-gray-700">
+								{getFieldIcon(field.type)}
+								<span>{field.label}</span>
+								{field.required && <span className="text-red-500">*</span>}
+							</label>
+							{renderField(field)}
+						</div>
+					))}
+					{getEditableFields().length === 0 && (
 						<div className="text-center text-gray-500 py-8">
 							<Palette className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-							<p className="text-sm">Style customization coming soon</p>
+							<p className="text-sm">No style fields available</p>
 							<p className="text-xs text-gray-400 mt-1">
-								This will include spacing, colors, fonts, and responsive
-								settings
+								Add style fields to the component schema
 							</p>
 						</div>
-					</div>
-				)}
+					)}
+				</div>
+			)}
 			</div>
 
 			{/* Footer */}

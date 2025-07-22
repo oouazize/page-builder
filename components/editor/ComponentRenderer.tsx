@@ -75,7 +75,7 @@ export function ComponentRenderer({
 
 			<div
 				dangerouslySetInnerHTML={{ __html: processedHTML }}
-				className="w-full"
+				className="relative w-full"
 			/>
 
 			{/* Development mode indicator */}

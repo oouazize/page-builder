@@ -1,5 +1,5 @@
 import { ComponentTemplate } from "@/types";
-import { generateId } from "./localStorage";
+import { generateId, componentTemplateStorage } from "./localStorage";
 
 export const seedComponentTemplates: ComponentTemplate[] = [
 	// AgriFood Tech Hero Section - Main Hero
@@ -19,7 +19,7 @@ export const seedComponentTemplates: ComponentTemplate[] = [
         ></div>
         
         <!-- Content Below Cover -->
-        <div class="flex md:flex-row flex-col justify-between items-center space-y-6 py-6 px-4 md:px-20">
+        <div class="flex md:flex-row flex-col justify-between items-center space-y-6 py-6 px-4 md:px-20" style="background-color: {{backgroundColor}}; color: {{textColor}};">
           <div class="w-full flex items-center gap-4">
             <img
               src="{{logoUrl}}"
@@ -81,49 +81,36 @@ export const seedComponentTemplates: ComponentTemplate[] = [
 			participantCount: "1000",
 			participantLabel: "Participants",
 			timeLeft: "48 days left",
+			backgroundColor: "#ffffff",
+			textColor: "#000000",
 		},
 		schema: {
 			fields: [
-				{
-					name: "organizationName",
-					type: "text",
-					label: "Organization Name",
-					required: true,
-				},
-				{ name: "logoUrl", type: "image", label: "Organization Logo" },
-				{
-					name: "programTitle",
-					type: "text",
-					label: "Program Title",
-					required: true,
-				},
-				{
-					name: "programDescription",
-					type: "textarea",
-					label: "Program Description",
-				},
 				{
 					name: "coverImageDesktop",
 					type: "image",
 					label: "Cover Image (Desktop)",
 					required: true,
+					tab: "content",
 				},
 				{
 					name: "coverImageMobile",
 					type: "image",
 					label: "Cover Image (Mobile)",
+					tab: "content",
 				},
 				{
-					name: "participantCount",
-					type: "text",
-					label: "Participant Count",
+					name: "backgroundColor",
+					type: "color",
+					label: "Background Color",
+					tab: "style",
 				},
 				{
-					name: "participantLabel",
-					type: "text",
-					label: "Participant Label",
+					name: "textColor",
+					type: "color",
+					label: "Text Color",
+					tab: "style",
 				},
-				{ name: "timeLeft", type: "text", label: "Time Left" },
 			],
 		},
 		isActive: true,
@@ -148,7 +135,7 @@ export const seedComponentTemplates: ComponentTemplate[] = [
                 <img class="h-8 w-auto sm:h-10" src="{{logoUrl}}" alt="{{companyName}}">
               </a>
             </div>
-            <div class="-mr-2 -my-2 md:hidden">
+            <div class=" -mr-2 -my-2 md:hidden">
               <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100">
                 <span class="sr-only">Open menu</span>
                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -930,6 +917,752 @@ export const seedComponentTemplates: ComponentTemplate[] = [
 		createdAt: new Date().toISOString(),
 		updatedAt: new Date().toISOString(),
 	},
+
+	// About Section - Simple Layout (REPLACED WITH MODERN VERSION)
+	{
+		id: generateId(),
+		name: "About - Modern Animated",
+		category: "about",
+		variant: "modern-animated",
+		description:
+			"Modern about section with animated numbers, smooth transitions, and contemporary design inspired by skiper-ui",
+		htmlContent: `
+      <section class="bg-gradient-to-br from-slate-50 to-blue-50 py-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Header with fade-in animation -->
+          <div class="text-center mb-16 opacity-0 animate-fade-in">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-500 rounded-2xl mb-6 transform rotate-3 hover:rotate-6 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {{sectionTitle}}
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              {{description}}
+            </p>
+          </div>
+          
+          <!-- Animated Stats Grid -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <div class="text-center group cursor-pointer">
+              <div class="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-white/20">
+                <div class="text-4xl font-bold text-blue-600 mb-2 counter" data-target="{{stat1Number}}">0</div>
+                <div class="text-sm text-gray-600 font-medium">{{stat1Label}}</div>
+              </div>
+            </div>
+            <div class="text-center group cursor-pointer">
+              <div class="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-white/20">
+                <div class="text-4xl font-bold text-emerald-600 mb-2 counter" data-target="{{stat2Number}}">0</div>
+                <div class="text-sm text-gray-600 font-medium">{{stat2Label}}</div>
+              </div>
+            </div>
+            <div class="text-center group cursor-pointer">
+              <div class="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-white/20">
+                <div class="text-4xl font-bold text-purple-600 mb-2 counter" data-target="{{stat3Number}}">0</div>
+                <div class="text-sm text-gray-600 font-medium">{{stat3Label}}</div>
+              </div>
+            </div>
+            <div class="text-center group cursor-pointer">
+              <div class="bg-white/70 backdrop-blur-sm rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-white/20">
+                <div class="text-4xl font-bold text-orange-600 mb-2 counter" data-target="{{stat4Number}}">0</div>
+                <div class="text-sm text-gray-600 font-medium">{{stat4Label}}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Card with Floating Elements -->
+          <div class="relative">
+            <div class="bg-white/80 backdrop-blur-lg rounded-3xl p-8 lg:p-12 shadow-2xl border border-white/20 relative overflow-hidden">
+              <!-- Floating decoration -->
+              <div class="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
+              <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-br from-emerald-400/20 to-blue-400/20 rounded-full blur-3xl"></div>
+              
+              <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                  <h3 class="text-2xl font-bold text-gray-900 mb-4">{{contentTitle}}</h3>
+                  <p class="text-lg text-gray-700 leading-relaxed">
+                    {{content}}
+                  </p>
+                  
+                  <!-- Animated highlights -->
+                  <div class="flex flex-wrap gap-3 mt-8">
+                    <span class="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors duration-200 cursor-pointer">
+                      <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
+                      {{highlight1}}
+                    </span>
+                    <span class="inline-flex items-center px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium hover:bg-emerald-100 transition-colors duration-200 cursor-pointer">
+                      <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
+                      {{highlight2}}
+                    </span>
+                    <span class="inline-flex items-center px-4 py-2 bg-purple-50 text-purple-700 rounded-full text-sm font-medium hover:bg-purple-100 transition-colors duration-200 cursor-pointer">
+                      <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
+                      {{highlight3}}
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="relative">
+                  <div class="relative group">
+                    <img class="w-full rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 transform group-hover:scale-105" src="{{imageUrl}}" alt="{{imageAlt}}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  <!-- Floating badge -->
+                  <div class="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-xl transform rotate-6 hover:rotate-12 transition-transform duration-300">
+                    <div class="text-2xl">🚀</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `,
+		cssStyles: `
+			@keyframes fade-in {
+				from { opacity: 0; transform: translateY(30px); }
+				to { opacity: 1; transform: translateY(0); }
+			}
+			
+			@keyframes counter {
+				from { transform: translateY(10px); opacity: 0; }
+				to { transform: translateY(0); opacity: 1; }
+			}
+			
+			.animate-fade-in {
+				animation: fade-in 0.6s ease-out forwards;
+				animation-delay: 0.2s;
+			}
+			
+			.counter {
+				animation: counter 0.6s ease-out;
+			}
+			
+			/* Number Counter Animation */
+			.counter-animation {
+				animation: counter 0.6s ease-out;
+			}
+		`,
+		defaultData: {
+			sectionTitle: "Innovation at Scale",
+			description:
+				"Transforming ideas into breakthrough solutions through cutting-edge technology and collaborative innovation.",
+			contentTitle: "Our Story",
+			content:
+				"We're pioneering the future of agricultural technology by bridging the gap between innovative startups and market success. Our comprehensive ecosystem provides the tools, mentorship, and resources needed to transform bold ideas into scalable solutions that make a real impact.",
+			imageUrl:
+				"https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1476&q=80",
+			imageAlt: "Innovation workspace",
+			stat1Number: "250",
+			stat1Label: "Startups",
+			stat2Number: "15",
+			stat2Label: "Million €",
+			stat3Number: "85",
+			stat3Label: "Success Rate %",
+			stat4Number: "50",
+			stat4Label: "Mentors",
+			highlight1: "AI-Powered",
+			highlight2: "Sustainable",
+			highlight3: "Scalable",
+		},
+		schema: {
+			fields: [
+				{
+					name: "sectionTitle",
+					type: "text",
+					label: "Section Title",
+					required: true,
+				},
+				{ name: "description", type: "textarea", label: "Description" },
+				{ name: "contentTitle", type: "text", label: "Content Title" },
+				{ name: "content", type: "textarea", label: "Main Content" },
+				{ name: "imageUrl", type: "image", label: "Feature Image" },
+				{ name: "imageAlt", type: "text", label: "Image Alt Text" },
+				{ name: "stat1Number", type: "text", label: "Statistic 1 Number" },
+				{ name: "stat1Label", type: "text", label: "Statistic 1 Label" },
+				{ name: "stat2Number", type: "text", label: "Statistic 2 Number" },
+				{ name: "stat2Label", type: "text", label: "Statistic 2 Label" },
+				{ name: "stat3Number", type: "text", label: "Statistic 3 Number" },
+				{ name: "stat3Label", type: "text", label: "Statistic 3 Label" },
+				{ name: "stat4Number", type: "text", label: "Statistic 4 Number" },
+				{ name: "stat4Label", type: "text", label: "Statistic 4 Label" },
+				{ name: "highlight1", type: "text", label: "Highlight 1" },
+				{ name: "highlight2", type: "text", label: "Highlight 2" },
+				{ name: "highlight3", type: "text", label: "Highlight 3" },
+			],
+		},
+		isActive: true,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+	},
+
+	// Mission Section - Modern Card with Animations (REPLACED)
+	{
+		id: generateId(),
+		name: "Mission - Interactive Card",
+		category: "mission",
+		variant: "interactive-card",
+		description:
+			"Interactive mission card with hover effects, animated icons, and modern glassmorphism design inspired by skiper-ui",
+		htmlContent: `
+      <section class="bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 py-20 relative overflow-hidden">
+        <!-- Animated background elements -->
+        <div class="absolute inset-0">
+          <div class="absolute top-20 left-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+          <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Header -->
+          <div class="text-center mb-16">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 backdrop-blur-lg rounded-3xl mb-8 group hover:scale-110 transition-transform duration-300">
+              <svg class="w-10 h-10 text-white group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{iconPath}}"></path>
+              </svg>
+            </div>
+            <h2 class="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+              {{sectionTitle}}
+            </h2>
+          </div>
+          
+          <!-- Mission Card -->
+          <div class="relative group cursor-pointer">
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-25 group-hover:opacity-75 transition-opacity duration-500"></div>
+            <div class="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-white/20 hover:border-white/40 transition-all duration-500">
+              
+              <!-- Mission Content -->
+              <div class="text-center space-y-8">
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">{{missionTitle}}</h3>
+                <p class="text-xl text-white/80 leading-relaxed max-w-4xl mx-auto">
+                  {{missionStatement}}
+                </p>
+                
+                <!-- Metrics with Animation -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                  <div class="group/metric hover:scale-105 transition-transform duration-300">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300">
+                      <div class="text-4xl font-bold text-blue-300 mb-2 counter" data-target="{{metric1Value}}">0</div>
+                      <div class="text-white/70 font-medium">{{metric1Label}}</div>
+                      <div class="w-full bg-white/20 rounded-full h-2 mt-4">
+                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-2 rounded-full transition-all duration-1000 group-hover/metric:w-full" style="width: 70%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="group/metric hover:scale-105 transition-transform duration-300">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300">
+                      <div class="text-4xl font-bold text-emerald-300 mb-2 counter" data-target="{{metric2Value}}">0</div>
+                      <div class="text-white/70 font-medium">{{metric2Label}}</div>
+                      <div class="w-full bg-white/20 rounded-full h-2 mt-4">
+                        <div class="bg-gradient-to-r from-emerald-400 to-emerald-600 h-2 rounded-full transition-all duration-1000 group-hover/metric:w-full" style="width: 85%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="group/metric hover:scale-105 transition-transform duration-300">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300">
+                      <div class="text-4xl font-bold text-purple-300 mb-2 counter" data-target="{{metric3Value}}">0</div>
+                      <div class="text-white/70 font-medium">{{metric3Label}}</div>
+                      <div class="w-full bg-white/20 rounded-full h-2 mt-4">
+                        <div class="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full transition-all duration-1000 group-hover/metric:w-full" style="width: 90%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- CTA Button -->
+                <div class="mt-12">
+                  <button class="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-2xl font-semibold hover:bg-gray-100 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl">
+                    <span>Learn More</span>
+                    <svg class="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `,
+		cssStyles: `
+			@keyframes float {
+				0%, 100% { transform: translateY(0px); }
+				50% { transform: translateY(-20px); }
+			}
+			
+			.animate-float {
+				animation: float 6s ease-in-out infinite;
+			}
+			
+			/* Enhanced counter animation */
+			.counter {
+				opacity: 0;
+				animation: fadeInUp 0.8s ease-out forwards;
+			}
+			
+			@keyframes fadeInUp {
+				from {
+					opacity: 0;
+					transform: translateY(30px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+		`,
+		defaultData: {
+			sectionTitle: "Our Mission",
+			missionTitle: "Accelerating Innovation",
+			missionStatement:
+				"We empower the next generation of agricultural pioneers by providing cutting-edge resources, expert mentorship, and a collaborative ecosystem where breakthrough ideas transform into solutions that feed the world sustainably.",
+			iconPath: "M13 10V3L4 14h7v7l9-11h-7z",
+			metric1Value: "100",
+			metric1Label: "Startups Accelerated",
+			metric2Value: "50",
+			metric2Label: "Million € Raised",
+			metric3Value: "25",
+			metric3Label: "Success Stories",
+		},
+		schema: {
+			fields: [
+				{
+					name: "sectionTitle",
+					type: "text",
+					label: "Section Title",
+					required: true,
+				},
+				{
+					name: "missionTitle",
+					type: "text",
+					label: "Mission Title",
+					required: true,
+				},
+				{
+					name: "missionStatement",
+					type: "textarea",
+					label: "Mission Statement",
+					required: true,
+				},
+				{ name: "iconPath", type: "text", label: "Icon SVG Path" },
+				{ name: "metric1Value", type: "text", label: "Metric 1 Value" },
+				{ name: "metric1Label", type: "text", label: "Metric 1 Label" },
+				{ name: "metric2Value", type: "text", label: "Metric 2 Value" },
+				{ name: "metric2Label", type: "text", label: "Metric 2 Label" },
+				{ name: "metric3Value", type: "text", label: "Metric 3 Value" },
+				{ name: "metric3Label", type: "text", label: "Metric 3 Label" },
+			],
+		},
+		isActive: true,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+	},
+
+	// Vision Section - Modern Interactive (REPLACED)
+	{
+		id: generateId(),
+		name: "Vision - Modern Interactive",
+		category: "vision",
+		variant: "modern-interactive",
+		description:
+			"Interactive vision section with timeline animation, hover effects, and modern design inspired by skiper-ui",
+		htmlContent: `
+      <section class="bg-gradient-to-br from-gray-50 to-blue-50 py-20 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-40">
+          <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #3b82f6 2px, transparent 2px), radial-gradient(circle at 75% 75%, #8b5cf6 2px, transparent 2px); background-size: 60px 60px;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Header -->
+          <div class="text-center mb-20">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-8 transform hover:scale-110 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {{sectionTitle}}
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              {{visionDescription}}
+            </p>
+          </div>
+          
+          <!-- Main Content Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Left: Vision Content -->
+            <div class="space-y-8">
+              <h3 class="text-3xl font-bold text-gray-900">{{visionTitle}}</h3>
+              <p class="text-lg text-gray-700 leading-relaxed">
+                {{visionStatement}}
+              </p>
+              
+              <!-- Interactive Goals Timeline -->
+              <div class="space-y-6 mt-12">
+                <div class="flex items-start group cursor-pointer hover:bg-white/50 p-4 rounded-2xl transition-all duration-300">
+                  <div class="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-300">
+                    <span class="text-white font-bold">1</span>
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">{{goal1Title}}</h4>
+                    <p class="text-gray-600 mt-1">{{goal1}}</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                      <div class="bg-blue-500 h-2 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 30%;"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex items-start group cursor-pointer hover:bg-white/50 p-4 rounded-2xl transition-all duration-300">
+                  <div class="flex-shrink-0 w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition-colors duration-300">
+                    <span class="text-white font-bold">2</span>
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors duration-300">{{goal2Title}}</h4>
+                    <p class="text-gray-600 mt-1">{{goal2}}</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                      <div class="bg-emerald-500 h-2 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 60%;"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex items-start group cursor-pointer hover:bg-white/50 p-4 rounded-2xl transition-all duration-300">
+                  <div class="flex-shrink-0 w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center group-hover:bg-purple-600 transition-colors duration-300">
+                    <span class="text-white font-bold">3</span>
+                  </div>
+                  <div class="ml-4 flex-1">
+                    <h4 class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors duration-300">{{goal3Title}}</h4>
+                    <p class="text-gray-600 mt-1">{{goal3}}</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                      <div class="bg-purple-500 h-2 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 45%;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right: Interactive Image Card -->
+            <div class="relative">
+              <div class="relative group">
+                <!-- Main Image -->
+                <div class="relative overflow-hidden rounded-3xl bg-white/80 backdrop-blur-lg p-4 shadow-2xl hover:shadow-3xl transition-all duration-500">
+                  <img class="w-full rounded-2xl transition-transform duration-500 group-hover:scale-105" src="{{visionImage}}" alt="{{imageAlt}}">
+                  <div class="absolute inset-4 bg-gradient-to-t from-black/40 via-transparent to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  <!-- Overlay Content -->
+                  <div class="absolute bottom-6 left-6 right-6 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <h4 class="text-xl font-bold mb-2">Future of Innovation</h4>
+                    <p class="text-sm">Transforming ideas into reality</p>
+                  </div>
+                </div>
+                
+                <!-- Floating Elements -->
+                <div class="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center text-white font-bold text-xl transform rotate-12 hover:rotate-6 transition-transform duration-300 shadow-lg">
+                  2030
+                </div>
+                
+                <div class="absolute -bottom-6 -left-6 w-20 h-20 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-2xl flex items-center justify-center transform -rotate-12 hover:rotate-0 transition-transform duration-300 shadow-lg">
+                  <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `,
+		cssStyles: `
+			@keyframes slideInLeft {
+				from {
+					opacity: 0;
+					transform: translateX(-50px);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(0);
+				}
+			}
+			
+			@keyframes slideInRight {
+				from {
+					opacity: 0;
+					transform: translateX(50px);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(0);
+				}
+			}
+			
+			.slide-in-left {
+				animation: slideInLeft 0.6s ease-out;
+			}
+			
+			.slide-in-right {
+				animation: slideInRight 0.6s ease-out;
+			}
+			
+			/* Progress bar animation */
+			.progress-bar {
+				transition: width 2s ease-in-out;
+			}
+		`,
+		defaultData: {
+			sectionTitle: "Our Vision",
+			visionDescription:
+				"Shaping the future of sustainable agriculture through innovation and technology",
+			visionTitle: "The Future We're Building",
+			visionStatement:
+				"We envision a world where cutting-edge agricultural technology creates sustainable, profitable farming solutions that feed growing populations while preserving our planet for future generations.",
+			visionImage:
+				"https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+			imageAlt: "Future of agriculture",
+			goal1Title: "Innovation Hub",
+			goal1:
+				"Establish Morocco as the leading AgriTech innovation center in Africa",
+			goal2Title: "Startup Ecosystem",
+			goal2:
+				"Support 1000+ agricultural startups by 2030 with comprehensive resources",
+			goal3Title: "Global Impact",
+			goal3:
+				"Create sustainable farming solutions benefiting millions worldwide",
+		},
+		schema: {
+			fields: [
+				{
+					name: "sectionTitle",
+					type: "text",
+					label: "Section Title",
+					required: true,
+				},
+				{
+					name: "visionDescription",
+					type: "text",
+					label: "Vision Description",
+				},
+				{
+					name: "visionTitle",
+					type: "text",
+					label: "Vision Title",
+					required: true,
+				},
+				{
+					name: "visionStatement",
+					type: "textarea",
+					label: "Vision Statement",
+					required: true,
+				},
+				{ name: "visionImage", type: "image", label: "Vision Image" },
+				{ name: "imageAlt", type: "text", label: "Image Alt Text" },
+				{ name: "goal1Title", type: "text", label: "Goal 1 Title" },
+				{ name: "goal1", type: "text", label: "Goal 1" },
+				{ name: "goal2Title", type: "text", label: "Goal 2 Title" },
+				{ name: "goal2", type: "text", label: "Goal 2" },
+				{ name: "goal3Title", type: "text", label: "Goal 3 Title" },
+				{ name: "goal3", type: "text", label: "Goal 3" },
+			],
+		},
+		isActive: true,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+	},
+
+	// About Section - Stats Layout (ENHANCED VERSION)
+	{
+		id: generateId(),
+		name: "About - Animated Stats Grid",
+		category: "about",
+		variant: "animated-stats",
+		description:
+			"Modern stats section with animated counters, progressive disclosure, and interactive elements inspired by skiper-ui",
+		htmlContent: `
+      <section class="bg-white py-20 relative overflow-hidden">
+        <!-- Background decorations -->
+        <div class="absolute top-0 left-0 w-full h-full">
+          <div class="absolute top-20 left-20 w-2 h-2 bg-blue-400 rounded-full animate-ping"></div>
+          <div class="absolute top-40 right-32 w-3 h-3 bg-purple-400 rounded-full animate-ping" style="animation-delay: 1s;"></div>
+          <div class="absolute bottom-32 left-1/4 w-2 h-2 bg-emerald-400 rounded-full animate-ping" style="animation-delay: 2s;"></div>
+          <div class="absolute bottom-20 right-20 w-3 h-3 bg-orange-400 rounded-full animate-ping" style="animation-delay: 3s;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <!-- Header -->
+          <div class="text-center mb-20">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-8 transform hover:rotate-12 transition-transform duration-300">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+              </svg>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+              {{sectionTitle}}
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+              {{subtitle}}
+            </p>
+          </div>
+          
+          <!-- Interactive Stats Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            <div class="group cursor-pointer">
+              <div class="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-blue-200/50 hover:border-blue-300 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative z-10">
+                  <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-4xl font-bold text-blue-600 mb-2 counter" data-target="{{stat1Number}}">0</div>
+                  <div class="text-gray-600 font-medium">{{stat1Label}}</div>
+                  <div class="mt-4 w-full bg-blue-200 rounded-full h-1">
+                    <div class="bg-blue-500 h-1 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="group cursor-pointer">
+              <div class="relative bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-emerald-200/50 hover:border-emerald-300 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative z-10">
+                  <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                  </div>
+                  <div class="text-4xl font-bold text-emerald-600 mb-2 counter" data-target="{{stat2Number}}">0</div>
+                  <div class="text-gray-600 font-medium">{{stat2Label}}</div>
+                  <div class="mt-4 w-full bg-emerald-200 rounded-full h-1">
+                    <div class="bg-emerald-500 h-1 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="group cursor-pointer">
+              <div class="relative bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-purple-200/50 hover:border-purple-300 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative z-10">
+                  <div class="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-4xl font-bold text-purple-600 mb-2 counter" data-target="{{stat3Number}}">0</div>
+                  <div class="text-gray-600 font-medium">{{stat3Label}}</div>
+                  <div class="mt-4 w-full bg-purple-200 rounded-full h-1">
+                    <div class="bg-purple-500 h-1 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="group cursor-pointer">
+              <div class="relative bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-orange-200/50 hover:border-orange-300 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 rounded-full -translate-y-16 translate-x-16 group-hover:scale-150 transition-transform duration-500"></div>
+                <div class="relative z-10">
+                  <div class="w-12 h-12 bg-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform duration-300">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                    </svg>
+                  </div>
+                  <div class="text-4xl font-bold text-orange-600 mb-2 counter" data-target="{{stat4Number}}">0</div>
+                  <div class="text-gray-600 font-medium">{{stat4Label}}</div>
+                  <div class="mt-4 w-full bg-orange-200 rounded-full h-1">
+                    <div class="bg-orange-500 h-1 rounded-full transition-all duration-1000 group-hover:w-full" style="width: 0%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Description Card -->
+          <div class="max-w-5xl mx-auto">
+            <div class="bg-gradient-to-r from-gray-50 to-white rounded-3xl p-8 lg:p-12 shadow-xl border border-gray-200/50 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500"></div>
+              <div class="relative z-10 text-center">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">{{contentTitle}}</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                  {{description}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `,
+		cssStyles: `
+			@keyframes countUp {
+				from {
+					transform: translateY(20px);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0);
+					opacity: 1;
+				}
+			}
+			
+			.counter {
+				animation: countUp 0.6s ease-out;
+				animation-fill-mode: both;
+			}
+			
+			@keyframes progressFill {
+				from { width: 0%; }
+				to { width: 100%; }
+			}
+			
+			.progress-animation {
+				animation: progressFill 2s ease-out forwards;
+			}
+		`,
+		defaultData: {
+			sectionTitle: "Impact in Numbers",
+			subtitle:
+				"Measurable results driving the future of agricultural innovation",
+			contentTitle: "Building Tomorrow's Agriculture",
+			stat1Number: "250",
+			stat1Label: "Startups Launched",
+			stat2Number: "15",
+			stat2Label: "Million € Funding",
+			stat3Number: "85",
+			stat3Label: "Success Rate %",
+			stat4Number: "50",
+			stat4Label: "Expert Mentors",
+			description:
+				"Our commitment to excellence has created a thriving ecosystem where agricultural innovation flourishes. Through strategic partnerships, cutting-edge technology, and unwavering support, we've established ourselves as the premier destination for agtech entrepreneurs seeking to transform their vision into reality.",
+		},
+		schema: {
+			fields: [
+				{
+					name: "sectionTitle",
+					type: "text",
+					label: "Section Title",
+					required: true,
+				},
+				{ name: "subtitle", type: "text", label: "Subtitle" },
+				{ name: "contentTitle", type: "text", label: "Content Title" },
+				{ name: "stat1Number", type: "text", label: "Statistic 1 Number" },
+				{ name: "stat1Label", type: "text", label: "Statistic 1 Label" },
+				{ name: "stat2Number", type: "text", label: "Statistic 2 Number" },
+				{ name: "stat2Label", type: "text", label: "Statistic 2 Label" },
+				{ name: "stat3Number", type: "text", label: "Statistic 3 Number" },
+				{ name: "stat3Label", type: "text", label: "Statistic 3 Label" },
+				{ name: "stat4Number", type: "text", label: "Statistic 4 Number" },
+				{ name: "stat4Label", type: "text", label: "Statistic 4 Label" },
+				{ name: "description", type: "textarea", label: "Description" },
+			],
+		},
+		isActive: true,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+	},
 ];
 
 export function initializeSeedData(): ComponentTemplate[] {
@@ -938,19 +1671,29 @@ export function initializeSeedData(): ComponentTemplate[] {
 
 // Function to refresh required templates
 export function refreshRequiredTemplates(): void {
-	const { componentTemplateStorage } = require("./localStorage");
-
-	// Remove existing required templates
-	componentTemplateStorage.delete("required-program-hero");
-
-	// Add updated required templates
-	const requiredTemplates = seedComponentTemplates.filter(
-		(t) => t.id === "required-program-hero"
+	const existingTemplates = componentTemplateStorage.getAll();
+	const requiredTemplate = seedComponentTemplates.find(
+		(template) => template.id === "required-program-hero"
 	);
 
-	requiredTemplates.forEach((template) => {
-		componentTemplateStorage.save(template);
-	});
+	if (
+		requiredTemplate &&
+		!existingTemplates.some(
+			(t: ComponentTemplate) => t.id === requiredTemplate.id
+		)
+	) {
+		componentTemplateStorage.save(requiredTemplate);
+	}
+}
+
+// Function to force refresh all component templates with new data
+export function forceRefreshComponentTemplates(): void {
+	// Clear existing templates
+	localStorage.removeItem("pageBuilder_componentTemplates");
+
+	// Reinitialize with fresh seed data
+	const freshTemplates = initializeSeedData();
+	componentTemplateStorage.saveMany(freshTemplates);
 }
 
 // Export seed data initialization function

@@ -104,6 +104,9 @@ export function ComponentLibrary({ onAddComponent }: ComponentLibraryProps) {
 	}, []);
 
 	const filteredTemplates = templates.filter((template) => {
+		// Hide hero components from the component library
+		const isNotHero = template.category !== "hero";
+		
 		const matchesCategory =
 			!selectedCategory || template.category === selectedCategory;
 		const matchesSearch =
@@ -112,11 +115,16 @@ export function ComponentLibrary({ onAddComponent }: ComponentLibraryProps) {
 			template.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
 			template.category.toLowerCase().includes(searchTerm.toLowerCase());
 
-		return matchesCategory && matchesSearch;
+		return isNotHero && matchesCategory && matchesSearch;
 	});
 
 	const categoryCounts = COMPONENT_CATEGORIES.reduce((acc, category) => {
-		acc[category] = templates.filter((t) => t.category === category).length;
+		// Exclude hero components from category counts
+		if (category === "hero") {
+			acc[category] = 0;
+		} else {
+			acc[category] = templates.filter((t) => t.category === category).length;
+		}
 		return acc;
 	}, {} as Record<string, number>);
 

@@ -32,6 +32,8 @@ export default function EditorPage() {
 
 	const [page, setPage] = useState<Page | null>(null);
 	const [components, setComponents] = useState<PageComponent[]>([]);
+	const [pendingComponents, setPendingComponents] = useState<PageComponent[]>([]);
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 	const [editorState, setEditorState] = useState<EditorState>({
 		selectedComponentId: null,
 		draggedComponent: null,
@@ -61,6 +63,8 @@ export default function EditorPage() {
 		});
 
 		setComponents(componentsWithTemplates);
+		setPendingComponents(componentsWithTemplates);
+		setHasUnsavedChanges(false);
 	}, [pageId, router]);
 
 	const handleDragStart = (event: DragStartEvent) => {
@@ -114,7 +118,7 @@ export default function EditorPage() {
 				id: generateId(),
 				pageId,
 				templateId: template.id,
-				position: components.length,
+				position: pendingComponents.length,
 				customData: { ...template.defaultData },
 				isVisible: true,
 				createdAt: new Date().toISOString(),
@@ -122,23 +126,22 @@ export default function EditorPage() {
 				template,
 			};
 
-			pageComponentStorage.save(newComponent);
-			setComponents((prev) => [...prev, newComponent]);
+			// Add to pending changes instead of saving immediately
+			setPendingComponents((prev) => [...prev, newComponent]);
+			setHasUnsavedChanges(true);
 		}
 
 		// Handle reordering existing components
 		else if (editorState.draggedComponent?.type === "existing") {
-			const oldIndex = components.findIndex((c) => c.id === activeId);
-			const newIndex = components.findIndex((c) => c.id === overId);
+			const oldIndex = pendingComponents.findIndex((c) => c.id === activeId);
+			const newIndex = pendingComponents.findIndex((c) => c.id === overId);
 
 			if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-				const reorderedComponents = arrayMove(components, oldIndex, newIndex);
+				const reorderedComponents = arrayMove(pendingComponents, oldIndex, newIndex);
 
-				// Update positions
-				const componentIds = reorderedComponents.map((c) => c.id);
-				pageComponentStorage.updatePositions(pageId, componentIds);
-
-				setComponents(reorderedComponents);
+				// Update pending components with new order
+				setPendingComponents(reorderedComponents);
+				setHasUnsavedChanges(true);
 			}
 		}
 
@@ -153,7 +156,7 @@ export default function EditorPage() {
 		componentId: string,
 		newData: Record<string, any>
 	) => {
-		const component = components.find((c) => c.id === componentId);
+		const component = pendingComponents.find((c) => c.id === componentId);
 		if (!component) return;
 
 		const updatedComponent = {
@@ -162,15 +165,17 @@ export default function EditorPage() {
 			updatedAt: new Date().toISOString(),
 		};
 
-		pageComponentStorage.save(updatedComponent);
-		setComponents((prev) =>
+		// Update pending components instead of saving immediately
+		setPendingComponents((prev) =>
 			prev.map((c) => (c.id === componentId ? updatedComponent : c))
 		);
+		setHasUnsavedChanges(true);
 	};
 
 	const handleDeleteComponent = (componentId: string) => {
-		pageComponentStorage.delete(componentId);
-		setComponents((prev) => prev.filter((c) => c.id !== componentId));
+		// Remove from pending components instead of deleting immediately
+		setPendingComponents((prev) => prev.filter((c) => c.id !== componentId));
+		setHasUnsavedChanges(true);
 		setEditorState((prev) => ({
 			...prev,
 			selectedComponentId:
@@ -193,7 +198,7 @@ export default function EditorPage() {
 			id: generateId(),
 			pageId,
 			templateId: template.id,
-			position: components.length,
+			position: pendingComponents.length,
 			customData: { ...template.defaultData },
 			isVisible: true,
 			createdAt: new Date().toISOString(),
@@ -201,8 +206,9 @@ export default function EditorPage() {
 			template,
 		};
 
-		pageComponentStorage.save(newComponent);
-		setComponents((prev) => [...prev, newComponent]);
+		// Add to pending components instead of saving immediately
+		setPendingComponents((prev) => [...prev, newComponent]);
+		setHasUnsavedChanges(true);
 
 		// Automatically select the newly added component
 		setEditorState((prev) => ({
@@ -211,8 +217,38 @@ export default function EditorPage() {
 		}));
 	};
 
+	// Save function to apply all pending changes
+	const handleSaveChanges = () => {
+		// Delete components that were removed
+		const currentComponentIds = components.map(c => c.id);
+		const pendingComponentIds = pendingComponents.map(c => c.id);
+		const deletedComponentIds = currentComponentIds.filter(id => !pendingComponentIds.includes(id));
+		
+		deletedComponentIds.forEach(id => {
+			pageComponentStorage.delete(id);
+		});
+		
+		// Save all pending components
+		pendingComponents.forEach((component, index) => {
+			const componentToSave = {
+				...component,
+				position: index,
+				updatedAt: new Date().toISOString(),
+			};
+			pageComponentStorage.save(componentToSave);
+		});
+		
+		// Update positions if needed
+		const componentIds = pendingComponents.map((c) => c.id);
+		pageComponentStorage.updatePositions(pageId, componentIds);
+		
+		// Update the main components state
+		setComponents([...pendingComponents]);
+		setHasUnsavedChanges(false);
+	};
+
 	const selectedComponent =
-		components.find((c) => c.id === editorState.selectedComponentId) || null;
+		pendingComponents.find((c) => c.id === editorState.selectedComponentId) || null;
 
 	if (!page) {
 		return (
@@ -235,6 +271,8 @@ export default function EditorPage() {
 				onBreakpointChange={(breakpoint) =>
 					setEditorState((prev) => ({ ...prev, currentBreakpoint: breakpoint }))
 				}
+				onSave={handleSaveChanges}
+				hasUnsavedChanges={hasUnsavedChanges}
 			/>
 			<div className="flex-1 flex overflow-hidden">
 				<DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -244,21 +282,21 @@ export default function EditorPage() {
 
 					<main className="flex-1 flex">
 						<SortableContext
-							items={components.map((c) => c.id)}
-							strategy={verticalListSortingStrategy}
-						>
-							<Canvas
-								components={components}
-								selectedComponentId={editorState.selectedComponentId}
-								isPreviewMode={editorState.isPreviewMode}
-								currentBreakpoint={editorState.currentBreakpoint}
-								onSelectComponent={handleSelectComponent}
-								onDeleteComponent={handleDeleteComponent}
-							/>
-						</SortableContext>
+						items={pendingComponents.map((c) => c.id)}
+						strategy={verticalListSortingStrategy}
+					>
+						<Canvas
+							components={pendingComponents}
+							selectedComponentId={editorState.selectedComponentId}
+							isPreviewMode={editorState.isPreviewMode}
+							currentBreakpoint={editorState.currentBreakpoint}
+							onSelectComponent={handleSelectComponent}
+							onDeleteComponent={handleDeleteComponent}
+						/>
+					</SortableContext>
 					</main>
 
-					{!editorState.isPreviewMode && (
+					{!editorState.isPreviewMode && selectedComponent && (
 						<PropertiesPanel
 							component={selectedComponent}
 							onUpdate={(data) =>
